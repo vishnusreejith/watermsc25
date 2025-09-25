@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Sampling & Analysis: A Practical Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-link.active { color: white; background-color: #1e40af; } /* blue-800 */
+        .tab-btn.active { border-color: #2563eb; color: #2563eb; background-color: #eff6ff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+        .step:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animated-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .animated-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .step-number {
+            background-color: #dbeafe; /* blue-100 */
+            color: #1e40af; /* blue-800 */
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 1rem;
+        }
+        /* Interactive Character Styles */
+        #character-guide {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: flex-end;
+            z-index: 100;
+        }
+        #character-avatar {
+            width: 100px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        #character-guide:hover #character-avatar {
+            transform: scale(1.05);
+        }
+        #speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+            padding: 1rem;
+            margin-right: 1rem;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        #speech-bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #speech-bubble:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-left-color: #ffffff;
+            border-right: 0;
+            margin-top: -15px;
+            margin-right: -15px;
+        }
+        #mute-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            cursor: pointer;
+            color: #9ca3af; /* gray-400 */
+        }
+        #mute-btn:hover {
+            color: #3b82f6; /* blue-500 */
+        }
+        .read-aloud-btn {
+            background-color: #e0f2fe; /* light-blue-100 */
+            color: #0c4a6e; /* light-blue-900 */
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .read-aloud-btn:hover {
+            background-color: #bae6fd; /* light-blue-200 */
+        }
+        .read-aloud-btn .icon-play .stop-icon { display: none; }
+        .read-aloud-btn .icon-stop .play-icon { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header and Navigation -->
+    <header class="bg-blue-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Lab Analysis Guide</h1>
+            <nav class="hidden md:flex space-x-1">
+                <button class="nav-link active px-3 py-2 rounded-md hover:bg-blue-800 transition" onclick="showPage('home')">Home</button>
+                <button class="nav-link px-3 py-2 rounded-md hover:bg-blue-800 transition" onclick="showPage('waterSampling')">Water Sampling</button>
+                <button class="nav-link px-3 py-2 rounded-md hover:bg-blue-800 transition" onclick="showPage('soilSampling')">Soil Sampling</button>
+                <button class="nav-link px-3 py-2 rounded-md hover:bg-blue-800 transition" onclick="showPage('analysis')">Analysis Methods</button>
+                <button class="nav-link px-3 py-2 rounded-md hover:bg-blue-800 transition" onclick="showPage('experiments')">Experiments</button>
+            </nav>
+            <button class="md:hidden" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div class="hidden md:hidden" id="mobile-menu">
+            <nav class="flex flex-col p-4">
+                <button class="nav-link active text-left py-2" onclick="showPage('home')">Home</button>
+                <button class="nav-link text-left py-2" onclick="showPage('waterSampling')">Water Sampling</button>
+                <button class="nav-link text-left py-2" onclick="showPage('soilSampling')">Soil Sampling</button>
+                <button class="nav-link text-left py-2" onclick="showPage('analysis')">Analysis Methods</button>
+                <button class="nav-link text-left py-2" onclick="showPage('experiments')">Experiments</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Home Page -->
+        <section id="home" class="page-content active">
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                 <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-3xl font-bold text-blue-800">A Practical Guide to Environmental Sampling & Analysis</h2>
+                    <button class="read-aloud-btn" data-section-id="home" title="Read page aloud">
+                        <div class="icon-play">
+                            <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>
+                            <svg class="w-6 h-6 stop-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        </div>
+                    </button>
+                </div>
+                <p class="text-lg leading-relaxed mb-4">This guide provides a comprehensive overview of the standard procedures for collecting, preserving, and analyzing water and soil samples from contaminated environments. Accurate analysis begins with robust sampling, and this resource details the critical steps for obtaining reliable data.</p>
+                <img src="https://placehold.co/1200x400/a0d2eb/454545?text=Environmental+Scientist+at+Work" alt="Scientist collecting a water sample" class="w-full h-auto rounded-lg mt-4 shadow-md">
+                <div class="mt-8 border-t pt-6">
+                    <h3 class="font-semibold text-xl mb-4 text-gray-700">Key Sections:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li><strong>Wastewater Sampling:</strong> Techniques for collecting representative samples and ensuring their integrity through proper preservation.</li>
+                        <li><strong>Soil Sampling:</strong> Methods for sample collection from contaminated sites and subsequent laboratory processing.</li>
+                        <li><strong>Analytical Methods:</strong> Detailed principles and procedures for estimating key pollution indicators, from BOD and COD to heavy metals and pesticides.</li>
+                        <li><strong>Practical Experiments:</strong> Step-by-step examples of common environmental laboratory experiments.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Water Sampling Page -->
+        <section id="waterSampling" class="page-content">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-blue-800">Wastewater Sampling: Collection and Preservation</h2>
+                <button class="read-aloud-btn" data-section-id="waterSampling" title="Read page aloud">
+                    <div class="icon-play">
+                        <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>
+                        <svg class="w-6 h-6 stop-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </button>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Sampling Methods</h3>
+                <div class="grid md:grid-cols-2 gap-8 mt-6">
+                    <!-- Grab Sample Card -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 flex flex-col animated-card">
+                        <h4 class="font-bold text-xl text-center mb-2 text-gray-800">Grab Sampling</h4>
+                        <div class="w-full h-48 flex justify-center items-center my-4">
+                            <!-- SVG for Grab Sample -->
+                            <svg viewBox="0 0 200 100" class="h-full">
+                                <title>A stick figure taking a single water sample at one point in time.</title>
+                                <!-- Water -->
+                                <path d="M0 80 Q 25 70, 50 80 T 100 80 T 150 80 T 200 80 V 100 H 0 Z" fill="#a0e9ff"></path>
+                                <!-- Stick figure -->
+                                <g stroke="#374151" stroke-width="2">
+                                    <circle cx="100" cy="30" r="5" fill="#374151"></circle>
+                                    <line x1="100" y1="35" x2="100" y2="60"></line>
+                                    <line x1="100" y1="45" x2="85" y2="55"></line>
+                                    <line x1="100" y1="60" x2="90" y2="75"></line>
+                                    <line x1="100" y1="60" x2="110" y2="75"></line>
+                                    <!-- Arm with bottle -->
+                                    <line x1="100" y1="45" x2="115" y2="60"></line>
+                                    <rect x="112" y="60" width="8" height="12" fill="#e5e7eb" stroke="#6b7280"></rect>
+                                </g>
+                                 <!-- Time Icon -->
+                                <g transform="translate(30 25)">
+                                  <circle cx="10" cy="10" r="8" fill="white" stroke="#6b7280" stroke-width="1.5"></circle>
+                                  <line x1="10" y1="10" x2="10" y2="5" stroke="#6b7280" stroke-width="1"></line>
+                                  <line x1="10" y1="10" x2="13" y2="12" stroke="#6b7280" stroke-width="1"></line>
+                                  <text x="5" y="30" font-size="8" fill="#374151">Time 1</text>
+                                </g>
+                                <text x="135" y="35" font-size="8" fill="#374151" font-weight="bold">Single Sample</text>
+                            </svg>
+                        </div>
+                        <p class="text-center text-gray-600 flex-grow">A single sample collected at a specific time and location. It represents the water quality at that precise moment.</p>
+                    </div>
+                    <!-- Composite Sample Card -->
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 flex flex-col animated-card">
+                        <h4 class="font-bold text-xl text-center mb-2 text-gray-800">Composite Sampling</h4>
+                        <div class="w-full h-48 flex justify-center items-center my-4">
+                            <!-- SVG for Composite Sample -->
+                           <svg viewBox="0 0 200 100" class="h-full">
+                                <title>A representation of multiple samples being taken over time and combined into one.</title>
+                                <!-- Water -->
+                                <path d="M0 80 Q 25 70, 50 80 T 100 80 T 150 80 T 200 80 V 100 H 0 Z" fill="#a0e9ff"></path>
+                                <!-- Stick figure collecting -->
+                                <g stroke="#374151" stroke-width="2" opacity="0.4">
+                                    <circle cx="80" cy="30" r="5" fill="#374151"></circle>
+                                    <line x1="80" y1="35" x2="80" y2="60"></line>
+                                    <line x1="80" y1="45" x2="95" y2="60"></line>
+                                    <rect x="92" y="60" width="8" height="12" fill="#e5e7eb" stroke="#6b7280"></rect>
+                                    <line x1="80" y1="60" x2="70" y2="75"></line>
+                                    <line x1="80" y1="60" x2="90" y2="75"></line>
+                                </g>
+                                <!-- Time Icons -->
+                                <g transform="translate(10 15)">
+                                    <text x="0" y="0" font-size="8" fill="#374151">Time 1</text>
+                                    <path d="M 5 5 C 15 15, 60 15, 70 5" stroke="#6b7280" stroke-dasharray="2" fill="none"></path>
+                                </g>
+                                <g transform="translate(10 35)">
+                                    <text x="0" y="0" font-size="8" fill="#374151">Time 2</text>
+                                     <path d="M 5 5 C 15 15, 60 15, 70 5" stroke="#6b7280" stroke-dasharray="2" fill="none"></path>
+                                </g>
+                                <g transform="translate(10 55)">
+                                    <text x="0" y="0" font-size="8" fill="#374151">Time 3</text>
+                                     <path d="M 5 5 C 15 15, 60 15, 70 5" stroke="#6b7280" stroke-dasharray="2" fill="none"></path>
+                                </g>
+                                <!-- Combined Bottle -->
+                                <rect x="150" y="50" width="20" height="30" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"></rect>
+                                <rect x="155" y="45" width="10" height="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"></rect>
+                                <text x="140" y="35" font-size="8" fill="#374151" font-weight="bold">Combined</text>
+                                <text x="145" y="42" font-size="8" fill="#374151" font-weight="bold">Sample</text>
+                            </svg>
+                        </div>
+                        <p class="text-center text-gray-600 flex-grow">A mixture of grab samples from the same point but at different times. This provides an average concentration over a period.</p>
+                    </div>
+                </div>
+                 
+                <h3 class="text-2xl font-semibold text-gray-700 mt-8 mb-4">Sample Collection and Preservation</h3>
+                <p class="mb-4">Preservation is crucial to prevent chemical and biological changes between collection and analysis. The table below outlines standard preservation protocols.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 font-semibold">Parameter</th>
+                                <th class="p-3 font-semibold">Container</th>
+                                <th class="p-3 font-semibold">Preservative</th>
+                                <th class="p-3 font-semibold">Max Holding Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="p-3">BOD</td><td class="p-3">Plastic, Glass</td><td class="p-3">Cool to 4°C</td><td class="p-3">48 hours</td></tr>
+                            <tr class="border-b"><td class="p-3">COD</td><td class="p-3">Plastic, Glass</td><td class="p-3">H₂SO₄ to pH &lt;2, Cool to 4°C</td><td class="p-3">28 days</td></tr>
+                            <tr class="border-b"><td class="p-3">Total Coliforms</td><td class="p-3">Sterile Plastic, Glass</td><td class="p-3">Cool to 4°C, Sodium thiosulfate*</td><td class="p-3">24 hours</td></tr>
+                            <tr class="border-b"><td class="p-3">Heavy Metals</td><td class="p-3">Plastic, Glass</td><td class="p-3">HNO₃ to pH &lt;2</td><td class="p-3">6 months</td></tr>
+                            <tr class="border-b"><td class="p-3">Pesticides</td><td class="p-3">Glass, Teflon-lined cap</td><td class="p-3">Cool to 4°C</td><td class="p-3">7 days</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-sm mt-2 text-gray-500">*Sodium thiosulfate is added to neutralize any residual chlorine.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Soil Sampling Page -->
+        <section id="soilSampling" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-blue-800">Soil Sampling from Contaminated Sites</h2>
+                 <button class="read-aloud-btn" data-section-id="soilSampling" title="Read page aloud">
+                    <div class="icon-play">
+                        <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>
+                        <svg class="w-6 h-6 stop-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </button>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Sample Collection Tools</h3>
+                <p>The objective is to obtain a sample that represents the area of contamination. Common tools include soil augers, core samplers, and spades. Samples are typically collected from different depths to understand the vertical distribution of contaminants. For volatile organic compounds (VOCs), samples must be taken with minimal disturbance and sealed immediately.</p>
+                 <div class="mt-8 grid md:grid-cols-2 gap-6 text-center">
+                    <div class="bg-gray-50 p-4 rounded-lg border animated-card">
+                        <h4 class="font-semibold text-lg mb-2">Soil Auger</h4>
+                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto">
+                            <title>A diagram of a T-handle soil auger.</title>
+                            <g stroke="#374151" stroke-width="2" fill="none">
+                                <line x1="50" y1="20" x2="50" y2="80" /> <!-- Shaft -->
+                                <line x1="30" y1="20" x2="70" y2="20" /> <!-- Handle -->
+                                <path d="M 45 80 C 40 85, 40 95, 50 95 C 60 95, 60 85, 55 80" stroke-linecap="round"/>
+                                <path d="M 45 85 C 40 90, 40 100, 50 100 C 60 100, 60 90, 55 85" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                        <p class="text-sm text-gray-600 mt-2">Used for boring into soil to collect disturbed samples.</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border animated-card">
+                        <h4 class="font-semibold text-lg mb-2">Core Sampler</h4>
+                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto">
+                            <title>A diagram of a cylindrical soil core sampler.</title>
+                            <g stroke="#374151" stroke-width="2" fill="#e5e7eb">
+                                <rect x="40" y="20" width="20" height="70" /> <!-- Cylinder body -->
+                                <rect x="35" y="85" width="30" height="5" /> <!-- Cutting edge -->
+                            </g>
+                        </svg>
+                        <p class="text-sm text-gray-600 mt-2">Extracts an intact, cylindrical core for undisturbed samples.</p>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-700 mt-8 mb-4">Sample Processing in the Laboratory</h3>
+                <ol class="list-decimal list-inside space-y-3">
+                    <li><strong>Drying:</strong> Samples are typically air-dried or oven-dried at a low temperature (e.g., &lt;40°C) to prevent loss of volatile compounds.</li>
+                    <li><strong>Sieving:</strong> Dried soil is passed through a 2 mm sieve to remove stones, roots, and other large debris, ensuring a homogenous sample for analysis.</li>
+                    <li><strong>Grinding:</strong> The sieved sample may be ground to a fine powder to ensure complete extraction of contaminants during analysis.</li>
+                    <li><strong>Storage:</strong> Processed samples are stored in clean, labeled containers in a cool, dark place.</li>
+                </ol>
+            </div>
+        </section>
+        
+        <!-- Analysis Page -->
+        <section id="analysis" class="page-content">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-blue-800">Laboratory Analysis Methods</h2>
+                 <button class="read-aloud-btn" data-section-id="analysis" title="Read page aloud">
+                    <div class="icon-play">
+                        <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>
+                        <svg class="w-6 h-6 stop-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </button>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-6 overflow-x-auto" id="tabs">
+                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium" data-tab="oxygen">Oxygen Demand</button>
+                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium" data-tab="microbiology">Microbiology</button>
+                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium" data-tab="contaminants">Contaminants</button>
+                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium" data-tab="equipment">Sampling Equipment</button>
+                    </nav>
+                </div>
+                <!-- Tab Content -->
+                <div class="mt-6">
+                    <div id="oxygen" class="tab-content active">
+                        <h4 class="text-xl font-semibold mb-4">Estimation of DO, BOD, and COD</h4>
+                        <div class="space-y-4">
+                            <p><strong>Dissolved Oxygen (DO):</strong> Typically estimated using the Winkler method (an iodometric titration) or a DO meter. Low DO indicates pollution from oxygen-demanding wastes.</p>
+                            <p><strong>Biochemical Oxygen Demand (BOD):</strong> Measures the amount of oxygen consumed by microorganisms while decomposing organic matter. The standard test involves incubating a sealed water sample for 5 days at 20°C and measuring the change in DO. BOD₅ = (Initial DO - Final DO) x Dilution Factor.</p>
+                            <p><strong>Chemical Oxygen Demand (COD):</strong> Measures the oxygen equivalent of the organic matter susceptible to oxidation by a strong chemical oxidant (potassium dichromate). It's a faster method than BOD and measures both biodegradable and non-biodegradable organics.</p>
+                        </div>
+                    </div>
+                    <div id="microbiology" class="tab-content">
+                        <h4 class="text-xl font-semibold mb-4">Enumeration of Microorganisms</h4>
+                        <div class="space-y-4">
+                            <p><strong>Total Coliforms in Wastewater:</strong> Coliforms are indicator organisms for fecal contamination. They are enumerated using the Most Probable Number (MPN) method or the Membrane Filtration (MF) technique. The MPN method is a statistical estimation based on the number of positive results in a series of dilutions, while the MF technique involves filtering water and counting colonies on a selective agar medium.</p>
+                             <p><strong>Microorganisms from Polluted Habitats:</strong> Techniques like serial dilution and plating on selective or differential media are used to isolate and quantify specific groups of bacteria (e.g., hydrocarbon degraders, sulfate reducers) from soil or water to assess the microbial community structure and bioremediation potential.</p>
+                        </div>
+                    </div>
+                    <div id="contaminants" class="tab-content">
+                        <h4 class="text-xl font-semibold mb-4">Estimation of Specific Contaminants</h4>
+                         <div class="space-y-4">
+                            <p><strong>Organic Carbon (Soil/Sludge):</strong> Estimated using the Walkley-Black method, which involves wet oxidation of organic matter with a chromic acid mixture and titration of the unreacted oxidant.</p>
+                            <p><strong>Heavy Metals (Soil/Wastewater):</strong> After acid digestion to bring metals into solution, their concentration is determined using Atomic Absorption Spectrophotometry (AAS) or Inductively Coupled Plasma (ICP) Mass Spectrometry, which offer high sensitivity and specificity.</p>
+                             <p><strong>Pesticide Residue Analysis (Soil/Water):</strong> Involves solvent extraction of the residues, followed by a clean-up step to remove interferences. Final analysis is typically done using Gas Chromatography (GC) or High-Performance Liquid Chromatography (HPLC), often coupled with a mass spectrometer (MS) for definitive identification.</p>
+                        </div>
+                    </div>
+                    <div id="equipment" class="tab-content">
+                        <h4 class="text-xl font-semibold mb-4">Common Sampling Equipment</h4>
+                        <div class="space-y-6">
+                            <div>
+                                <h5 class="font-bold text-lg text-gray-700">Water Samplers</h5>
+                                <div class="mt-4 grid md:grid-cols-2 gap-6 text-center">
+                                    <div class="bg-gray-50 p-4 rounded-lg border">
+                                        <h6 class="font-semibold">Van Dorn Sampler</h6>
+                                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto my-2">
+                                             <title>A horizontal Van Dorn water sampler.</title>
+                                             <g stroke="#374151" stroke-width="1.5">
+                                                 <rect x="10" y="45" width="80" height="10" fill="#e5e7eb"/>
+                                                 <rect x="5" y="40" width="5" height="20" fill="#d1d5db"/>
+                                                 <rect x="90" y="40" width="5" height="20" fill="#d1d5db"/>
+                                                 <line x1="50" y1="45" x2="50" y2="20"/>
+                                                 <circle cx="50" cy="20" r="3" fill="#374151"/>
+                                             </g>
+                                        </svg>
+                                        <p class="text-sm text-gray-600">A horizontal tube that collects water samples from specific depths.</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg border">
+                                        <h6 class="font-semibold">Bailer</h6>
+                                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto my-2">
+                                             <title>A simple bailer for water sampling.</title>
+                                             <g stroke="#374151" stroke-width="1.5">
+                                                 <rect x="45" y="25" width="10" height="60" fill="#e5e7eb"/>
+                                                 <circle cx="50" cy="85" r="3" fill="#6b7280"/>
+                                                 <line x1="50" y1="25" x2="50" y2="10"/>
+                                                 <line x1="45" y1="10" x2="55" y2="10"/>
+                                             </g>
+                                        </svg>
+                                        <p class="text-sm text-gray-600">A simple tube with a check valve, used to retrieve samples from wells.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg text-gray-700 mt-4">Soil Samplers</h5>
+                                <p class="text-gray-600 mt-2">These are the same tools shown in the Soil Sampling section, such as augers and core samplers, used to collect representative samples from the ground.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experiments Page -->
+        <section id="experiments" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-blue-800">Practical Experiment Examples</h2>
+                 <button class="read-aloud-btn" data-section-id="experiments" title="Read page aloud">
+                    <div class="icon-play">
+                        <svg class="w-6 h-6 play-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>
+                        <svg class="w-6 h-6 stop-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </button>
+            </div>
+            
+            <!-- Experiment 1: BOD -->
+            <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 1: Determining BOD₅ of a Wastewater Sample</h3>
+                <p class="mb-6"><strong>Objective:</strong> To measure the amount of dissolved oxygen consumed by microorganisms during the decomposition of organic matter in a water sample over a 5-day period.</p>
+                
+                <h4 class="font-semibold text-lg mb-3">Procedure:</h4>
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div><strong>Sample Preparation:</strong> If the sample is expected to have high BOD, prepare several dilutions using aerated, nutrient-rich dilution water. This ensures the final DO reading is within the detectable range.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div><strong>Initial DO Measurement:</strong> Measure the initial dissolved oxygen (DO₁) of one set of sample dilutions immediately using the Winkler method or a DO meter.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div><strong>Incubation:</strong> Seal a parallel set of dilution bottles, ensuring no air bubbles are trapped inside. Incubate these bottles in the dark at 20°C for 5 days.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div><strong>Final DO Measurement:</strong> After 5 days, measure the final dissolved oxygen (DO₅) in the incubated bottles.</div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">5</div>
+                    <div><strong>Calculation:</strong> Calculate the BOD₅ using the formula: <br> <code class="bg-gray-200 p-1 rounded">BOD₅ (mg/L) = (DO₁ - DO₅) x Dilution Factor</code></div>
+                </div>
+            </div>
+
+            <!-- Experiment 2: Coliforms -->
+            <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 2: Enumerating Total Coliforms by Membrane Filtration</h3>
+                <p class="mb-6"><strong>Objective:</strong> To quantify the number of coliform bacteria in a water sample, which are indicators of fecal contamination.</p>
+                <img src="https://placehold.co/600x300/e0f2fe/374151?text=Membrane+Filtration+Apparatus" alt="Diagram of a membrane filtration apparatus" class="w-full max-w-md mx-auto rounded-lg my-4 shadow-md">
+                <h4 class="font-semibold text-lg mb-3">Procedure:</h4>
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div><strong>Filtration:</strong> Pass a known volume of the water sample (e.g., 100 mL) through a sterile 0.45 µm pore size membrane filter. The bacteria are retained on the filter's surface.</div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">2</div>
+                    <div><strong>Incubation:</strong> Aseptically place the membrane filter onto a petri dish containing a selective medium (like m-Endo agar), which allows coliforms to grow while inhibiting other bacteria. Incubate at 35°C for 22-24 hours.</div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">3</div>
+                    <div><strong>Colony Counting:</strong> After incubation, count the colonies that exhibit a characteristic metallic green sheen. These are identified as coliforms.</div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">4</div>
+                    <div><strong>Calculation:</strong> Report the results as Colony Forming Units (CFU) per 100 mL of the sample. <br> <code class="bg-gray-200 p-1 rounded">Coliforms/100 mL = (Number of colonies counted / Volume of sample filtered in mL) x 100</code></div>
+                </div>
+            </div>
+
+             <!-- Experiment 3: Heavy Metals -->
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 3: Heavy Metal (e.g., Lead) Analysis in Soil</h3>
+                <p class="mb-6"><strong>Objective:</strong> To determine the concentration of a specific heavy metal, such as lead (Pb), in a contaminated soil sample using Atomic Absorption Spectrophotometry (AAS).</p>
+                <img src="https://placehold.co/600x300/d1fae5/374151?text=Atomic+Absorption+Spectrophotometer" alt="Diagram of an Atomic Absorption Spectrophotometer" class="w-full max-w-md mx-auto rounded-lg my-4 shadow-md">
+                <h4 class="font-semibold text-lg mb-3">Procedure Summary:</h4>
+                 <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h5 class="font-semibold">Acid Digestion: Breaking Down the Sample</h5>
+                        <p class="mt-1">The goal of digestion is to completely break down the complex soil matrix (organic matter, silicates) and release the target heavy metals into a liquid (aqueous) form. A precisely weighed, dried soil sample is placed in a digestion vessel with a mixture of strong acids, commonly nitric acid (HNO₃) and hydrochloric acid (HCl), known as <em>aqua regia</em>. Nitric acid is a powerful oxidizing agent that destroys organic matter, while hydrochloric acid helps dissolve mineral components. The mixture is then heated, either on a hot plate in a fume hood or in a sealed vessel within a microwave digestion system, to accelerate the chemical reactions. After cooling, the solution is filtered to remove any remaining particulate matter and diluted to a precise volume with deionized water. This final solution is now ready for analysis.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div><strong>Analysis by AAS:</strong> The digested sample solution is introduced into the AAS instrument. The AAS measures the amount of light absorbed by the lead atoms at a specific wavelength, which is directly proportional to the concentration of lead in the sample.</div>
+                </div>
+                 <div class="step">
+                    <div class="step-number">3</div>
+                    <div><strong>Quantification:</strong> The concentration is determined by comparing the absorbance of the sample to a calibration curve created using standard solutions of known lead concentrations. The final result is reported in mg of lead per kg of dry soil (mg/kg).</div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Interactive Character -->
+    <div id="character-guide">
+        <div id="speech-bubble">
+            <button id="mute-btn" title="Mute/Unmute">
+                <svg id="speaker-on-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.707-.707zM15.904 15.904a1 1 0 01-1.414-1.414l-1.414-1.414a1 1 0 011.414-1.414l1.414 1.414a1 1 0 01-1.414 1.414zM12.672 12.672a1 1 0 01-1.414-1.414L10.586 10l.672-.672a1 1 0 011.414 1.414l-1.414 1.414z" clip-rule="evenodd" />
+                </svg>
+                <svg id="speaker-off-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7 2a1 1 0 00-.707.293L2.586 6H1a1 1 0 00-1 1v6a1 1 0 001 1h1.586l3.707 3.707A1 1 0 008 18V2a1 1 0 00-1-1zm4.707 3.293a1 1 0 00-1.414 0L9 6.586l-1.293-1.293a1 1 0 10-1.414 1.414L7.586 8l-1.293 1.293a1 1 0 101.414 1.414L9 9.414l1.293 1.293a1 1 0 001.414-1.414L10.414 8l1.293-1.293a1 1 0 000-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <p id="character-text" class="text-sm text-gray-700"></p>
+        </div>
+        <img src="https://placehold.co/100x150/ff9800/ffffff?text=Lalettan" alt="Lalettan, the lab guide" id="character-avatar" class="rounded-t-full">
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="container mx-auto px-6 py-6 text-center">
+            <p>&copy; 2024 | A Practical Guide for Environmental Science Students.</p>
+        </div>
+    </footer>
+
+    <script>
+        const pages = document.querySelectorAll('.page-content');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        // Character elements
+        const speechBubble = document.getElementById('speech-bubble');
+        const characterText = document.getElementById('character-text');
+        const muteBtn = document.getElementById('mute-btn');
+        const speakerOnIcon = document.getElementById('speaker-on-icon');
+        const speakerOffIcon = document.getElementById('speaker-off-icon');
+
+        let isMuted = localStorage.getItem('isMuted') === 'true';
+        let currentUtterance = null;
+
+
+        const characterDialogues = {
+            home: "Namaskaram! I'm Lalettan, your guide. We'll learn this together. Remember, every big discovery is a series of simple, correct steps. Let's start, shall we?",
+            waterSampling: "Kandille? Water sampling... It's all about timing and being in the right place. Oru correct sample can tell you the whole story. Athu pole. Just like that.",
+            soilSampling: "Ah, mannu... the soil. Each layer has a history. We must collect it with respect. Focus cheyyu... focus. You'll get what you need.",
+            analysis: "Welcome to the lab. Ivide, everything must be perfect. No room for error. A small mistake can change everything. So, with full concentration, let's proceed.",
+            experiments: "Now for the main event. Theory is one thing, but practice... that is the real test. Cheythu nokku... try it. You will get it. Appo, sheri!"
+        };
+
+        function speak(text, onEndCallback) {
+            if (!('speechSynthesis' in window)) return;
+            
+            speechSynthesis.cancel();
+            if (isMuted) return;
+
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.lang = 'en-US';
+            currentUtterance.onend = () => {
+                currentUtterance = null;
+                if (onEndCallback) onEndCallback();
+            };
+            speechSynthesis.speak(currentUtterance);
+        }
+
+        function stopSpeaking() {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+        }
+
+        // --- Page Navigation Logic ---
+        function showPage(pageId) {
+            stopSpeaking();
+            resetAllReadAloudButtons();
+
+            pages.forEach(page => page.classList.remove('active'));
+            const newPage = document.getElementById(pageId);
+            if (newPage) {
+                newPage.classList.add('active');
+            }
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick').includes(`'${pageId}'`)) {
+                    link.classList.add('active');
+                }
+            });
+
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+               mobileMenu.classList.add('hidden');
+            }
+            
+            updateCharacter(pageId);
+        }
+        
+        function updateCharacter(pageId) {
+            const dialogue = characterDialogues[pageId] || "";
+            if (speechBubble.classList.contains('visible')) {
+                speechBubble.classList.remove('visible');
+                setTimeout(() => {
+                    characterText.textContent = dialogue;
+                    speechBubble.classList.add('visible');
+                    speak(dialogue);
+                }, 400); 
+            } else {
+                 characterText.textContent = dialogue;
+                 setTimeout(() => {
+                    speechBubble.classList.add('visible');
+                    speak(dialogue);
+                 }, 500); 
+            }
+        }
+
+        function updateMuteButtonIcon() {
+            if (isMuted) {
+                speakerOnIcon.classList.add('hidden');
+                speakerOffIcon.classList.remove('hidden');
+            } else {
+                speakerOnIcon.classList.remove('hidden');
+                speakerOffIcon.classList.add('hidden');
+            }
+        }
+        
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            localStorage.setItem('isMuted', isMuted);
+            updateMuteButtonIcon();
+            if (isMuted) {
+                stopSpeaking();
+            }
+        });
+
+        if(mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                if (mobileMenu) {
+                    mobileMenu.classList.toggle('hidden');
+                }
+            });
+        }
+        
+        // --- Tab Logic ---
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', ().
