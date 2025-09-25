@@ -11,6 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* A slightly darker gray for contrast */
         }
         .page-content { display: none; }
         .page-content.active { display: block; animation: fadeIn 0.5s ease-in-out; }
@@ -88,7 +89,7 @@
             border-radius: .4em;
             padding: 1rem;
             margin-right: 1rem;
-            width: 250px;
+            width: 280px; /* Increased width */
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             opacity: 0;
             transform: translateY(10px);
@@ -132,13 +133,23 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .read-aloud-btn:hover {
             background-color: #bae6fd; /* light-blue-200 */
+            transform: scale(1.1);
         }
         .read-aloud-btn .icon-play .stop-icon { display: none; }
         .read-aloud-btn .icon-stop .play-icon { display: none; }
+
+        .visual-art-container {
+            background: linear-gradient(145deg, #e2e8f0, #ffffff);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            margin: 1rem auto;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -184,7 +195,37 @@
                     </button>
                 </div>
                 <p class="text-lg leading-relaxed mb-4">This guide provides a comprehensive overview of the standard procedures for collecting, preserving, and analyzing water and soil samples from contaminated environments. Accurate analysis begins with robust sampling, and this resource details the critical steps for obtaining reliable data.</p>
-                <img src="https://placehold.co/1200x400/a0d2eb/454545?text=Environmental+Scientist+at+Work" alt="Scientist collecting a water sample" class="w-full h-auto rounded-lg mt-4 shadow-md">
+                <div class="visual-art-container w-full h-64 md:h-96 my-4">
+                    <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                        <title>Animated illustration of a scientist collecting a water sample from a river.</title>
+                        <!-- Background -->
+                        <rect width="400" height="200" fill="#d1e8ff"></rect>
+                        <!-- Sun -->
+                        <circle cx="50" cy="50" r="20" fill="#ffdd57">
+                            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="20s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- River bank -->
+                        <path d="M 0,150 C 100,130 250,180 400,160 L 400,200 L 0,200 Z" fill="#65c18c"></path>
+                        <!-- Water -->
+                        <path fill="#78b0e8">
+                            <animate attributeName="d" dur="5s" repeatCount="indefinite" values="M0 160 Q 100 150, 200 160 T 400 160 V 200 H 0 Z; M0 160 Q 100 170, 200 160 T 400 160 V 200 H 0 Z; M0 160 Q 100 150, 200 160 T 400 160 V 200 H 0 Z;"/>
+                        </path>
+                        <!-- Scientist -->
+                        <g transform="translate(200, 100)">
+                            <circle cx="0" cy="-15" r="8" fill="#555"></circle>
+                            <rect x="-2" y="-7" width="4" height="25" fill="#555"></rect>
+                            <line x1="0" y1="0" x2="-15" y2="15" stroke="#555" stroke-width="4"></line>
+                            <line x1="0" y1="18" x2="-10" y2="35" stroke="#555" stroke-width="4"></line>
+                            <line x1="0" y1="18" x2="10" y2="35" stroke="#555" stroke-width="4"></line>
+                             <!-- Arm and vial -->
+                            <g>
+                                 <animateTransform attributeName="transform" type="rotate" from="-5" to="5" dur="3s" repeatCount="indefinite" values="-5; 5; -5" calcMode="spline" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"/>
+                                <line x1="0" y1="0" x2="20" y2="20" stroke="#555" stroke-width="4"></line>
+                                <rect x="18" y="20" width="8" height="12" fill="white" stroke="black"></rect>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
                 <div class="mt-8 border-t pt-6">
                     <h3 class="font-semibold text-xl mb-4 text-gray-700">Key Sections:</h3>
                     <ul class="list-disc list-inside space-y-2 text-gray-600">
@@ -385,25 +426,160 @@
                 <div class="mt-6">
                     <div id="oxygen" class="tab-content active">
                         <h4 class="text-xl font-semibold mb-4">Estimation of DO, BOD, and COD</h4>
-                        <div class="space-y-4">
-                            <p><strong>Dissolved Oxygen (DO):</strong> Typically estimated using the Winkler method (an iodometric titration) or a DO meter. Low DO indicates pollution from oxygen-demanding wastes.</p>
-                            <p><strong>Biochemical Oxygen Demand (BOD):</strong> Measures the amount of oxygen consumed by microorganisms while decomposing organic matter. The standard test involves incubating a sealed water sample for 5 days at 20°C and measuring the change in DO. BOD₅ = (Initial DO - Final DO) x Dilution Factor.</p>
-                            <p><strong>Chemical Oxygen Demand (COD):</strong> Measures the oxygen equivalent of the organic matter susceptible to oxidation by a strong chemical oxidant (potassium dichromate). It's a faster method than BOD and measures both biodegradable and non-biodegradable organics.</p>
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <p class="mb-4"><strong>Dissolved Oxygen (DO):</strong> Typically estimated using the Winkler method (an iodometric titration) or a DO meter. Low DO indicates pollution from oxygen-demanding wastes.</p>
+                                <p class="mb-4"><strong>Biochemical Oxygen Demand (BOD):</strong> Measures the oxygen consumed by microbes to decompose organic matter. The standard test is 5 days.</p>
+                                <p><strong>Chemical Oxygen Demand (COD):</strong> Measures all chemically oxidizable organic matter. It's a faster method than BOD.</p>
+                            </div>
+                            <div class="space-y-4">
+                               <div class="visual-art-container h-32">
+                                   <svg width="100%" height="100%" viewBox="0 0 200 80">
+                                        <title>BOD Animation</title>
+                                        <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">BOD: Bacteria Consume Waste</text>
+                                        <rect x="10" y="20" width="40" height="50" fill="#a0e9ff" stroke="#6b7280"/>
+                                        <rect x="10" y="20" width="40" height="10" fill="#d1d5db"/>
+                                        <path d="M 15 30 C 20 25, 25 35, 30 30" stroke="#8b5cf6" stroke-width="1" fill="none">
+                                            <animate attributeName="opacity" values="1;0" dur="5s" repeatCount="indefinite" />
+                                        </path>
+                                        <circle cx="20" cy="50" r="2" fill="#ef4444"><animateTransform attributeName="transform" type="translate" values="0 0; 5 5; -3 2; 0 0" dur="4s" repeatCount="indefinite"/></circle>
+                                        <circle cx="35" cy="60" r="2" fill="#ef4444"><animateTransform attributeName="transform" type="translate" values="0 0; -5 -5; 3 -2; 0 0" dur="5s" repeatCount="indefinite"/></circle>
+                                        <text x="60" y="35" font-size="8">O₂ Level</text>
+                                        <rect x="60" y="40" width="10" height="30" fill="#e5e7eb"/>
+                                        <rect id="do-level" x="61" y="41" width="8" height="28" fill="#3b82f6">
+                                            <animate attributeName="height" from="28" to="5" dur="5s" repeatCount="indefinite" />
+                                            <animate attributeName="y" from="41" to="64" dur="5s" repeatCount="indefinite" />
+                                        </rect>
+                                    </svg>
+                               </div>
+                               <div class="visual-art-container h-32">
+                                     <svg width="100%" height="100%" viewBox="0 0 200 80">
+                                        <title>COD Animation</title>
+                                         <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">COD: Chemical Oxidation</text>
+                                        <path d="M 20 70 C 10 80, 10 90, 20 95 L 60 95 C 70 90, 70 80, 60 70 L 50 70 L 50 40 L 30 40 L 30 70 Z" transform="scale(0.8) translate(0 -15)" fill="#e2e8f0" stroke="#718096" stroke-width="0.5"></path>
+                                        <rect x="22" y="59" width="30" height="18" fill="#fdba74">
+                                            <animate attributeName="fill" values="#fdba74;#86efac" dur="4s" repeatCount="indefinite" />
+                                        </rect>
+                                        <circle cx="37" cy="68" r="1.5" fill="white" opacity="0"><animate attributeName="cy" from="75" to="55" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="1" to="0" dur="2s" repeatCount="indefinite"/></circle>
+                                        <text x="70" y="60" font-size="8">Chemicals break</text>
+                                        <text x="70" y="70" font-size="8">down all waste.</text>
+                                    </svg>
+                               </div>
+                            </div>
                         </div>
                     </div>
                     <div id="microbiology" class="tab-content">
                         <h4 class="text-xl font-semibold mb-4">Enumeration of Microorganisms</h4>
-                        <div class="space-y-4">
-                            <p><strong>Total Coliforms in Wastewater:</strong> Coliforms are indicator organisms for fecal contamination. They are enumerated using the Most Probable Number (MPN) method or the Membrane Filtration (MF) technique. The MPN method is a statistical estimation based on the number of positive results in a series of dilutions, while the MF technique involves filtering water and counting colonies on a selective agar medium.</p>
-                             <p><strong>Microorganisms from Polluted Habitats:</strong> Techniques like serial dilution and plating on selective or differential media are used to isolate and quantify specific groups of bacteria (e.g., hydrocarbon degraders, sulfate reducers) from soil or water to assess the microbial community structure and bioremediation potential.</p>
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <p class="mb-4"><strong>Total Coliforms in Wastewater:</strong> Coliforms are indicator organisms for fecal contamination. They are enumerated using the <strong>Most Probable Number (MPN)</strong> method or the Membrane Filtration (MF) technique.</p>
+                                <p><strong>Microorganisms from Polluted Habitats:</strong> Techniques like serial dilution and plating on selective media are used to isolate and quantify specific bacteria from soil or water.</p>
+                            </div>
+                            <div class="visual-art-container h-48">
+                                <svg width="100%" height="100%" viewBox="0 0 200 100">
+                                    <title>MPN Method</title>
+                                    <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">MPN: Most Probable Number</text>
+                                    <g id="tubes">
+                                        <rect x="20" y="20" width="15" height="30" fill="#fef08a" stroke="#6b7280"><animate attributeName="fill" values="#fef08a;#ef4444" dur="3s" begin="0s" repeatCount="indefinite"/></rect>
+                                        <rect x="40" y="20" width="15" height="30" fill="#fef08a" stroke="#6b7280"><animate attributeName="fill" values="#fef08a;#ef4444" dur="3s" begin="1s" repeatCount="indefinite"/></rect>
+                                        <rect x="60" y="20" width="15" height="30" fill="#fef08a" stroke="#6b7280"/>
+
+                                        <rect x="20" y="60" width="15" height="30" fill="#fef08a" stroke="#6b7280"><animate attributeName="fill" values="#fef08a;#ef4444" dur="3s" begin="0.5s" repeatCount="indefinite"/></rect>
+                                        <rect x="40" y="60" width="15" height="30" fill="#fef08a" stroke="#6b7280"/>
+                                        <rect x="60" y="60" width="15" height="30" fill="#fef08a" stroke="#6b7280"/>
+                                    </g>
+                                    <text x="90" y="45" font-size="8">Count positive tubes</text>
+                                    <text x="90" y="55" font-size="8">(red) in each dilution</text>
+                                    <text x="90" y="65" font-size="8">to estimate bacteria.</text>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                     <div id="contaminants" class="tab-content">
                         <h4 class="text-xl font-semibold mb-4">Estimation of Specific Contaminants</h4>
-                         <div class="space-y-4">
-                            <p><strong>Organic Carbon (Soil/Sludge):</strong> Estimated using the Walkley-Black method, which involves wet oxidation of organic matter with a chromic acid mixture and titration of the unreacted oxidant.</p>
-                            <p><strong>Heavy Metals (Soil/Wastewater):</strong> After acid digestion to bring metals into solution, their concentration is determined using Atomic Absorption Spectrophotometry (AAS) or Inductively Coupled Plasma (ICP) Mass Spectrometry, which offer high sensitivity and specificity.</p>
-                             <p><strong>Pesticide Residue Analysis (Soil/Water):</strong> Involves solvent extraction of the residues, followed by a clean-up step to remove interferences. Final analysis is typically done using Gas Chromatography (GC) or High-Performance Liquid Chromatography (HPLC), often coupled with a mass spectrometer (MS) for definitive identification.</p>
+                         <div class="space-y-6">
+                            <div>
+                                <h5 class="font-semibold text-gray-700">Organic Carbon (Soil/Sludge)</h5>
+                                <div class="grid md:grid-cols-2 gap-8 items-center">
+                                    <p>Estimated using the Walkley-Black method, which involves wet oxidation of organic matter with a chromic acid mixture and titration of the unreacted oxidant.</p>
+                                    <div class="visual-art-container h-40">
+                                        <svg width="100%" height="100%" viewBox="0 0 200 100">
+                                        <title>Walkley-Black Titration</title>
+                                        <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">Organic Carbon Titration</text>
+                                        <rect x="75" y="20" width="10" height="50" fill="#e2e8f0" stroke="#718096" stroke-width="0.5"/>
+                                        <path d="M 75 70 L 80 75 L 85 70 Z" fill="#e2e8f0" stroke="#718096" stroke-width="0.5"/>
+                                        <rect id="titrant-level-oc" x="76" y="25" width="8" height="45" fill="#a7f3d0">
+                                            <animate attributeName="y" from="25" to="45" dur="4s" repeatCount="indefinite" />
+                                            <animate attributeName="height" from="45" to="25" dur="4s" repeatCount="indefinite" />
+                                        </rect>
+                                        <path d="M 120 70 C 110 80, 110 90, 120 95 L 160 95 C 170 90, 170 80, 160 70 Z" fill="#e2e8f0" stroke="#718096" stroke-width="0.5"/>
+                                        <rect x="122" y="75" width="36" height="18" fill="#16a34a">
+                                           <animate attributeName="fill" values="#16a34a;#ca8a04;#16a34a" dur="4s" repeatCount="indefinite" />
+                                        </rect>
+                                        <text x="125" y="65" font-size="8">Green to Brownish</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                             <div>
+                                <h5 class="font-semibold text-gray-700">Heavy Metals (Soil/Wastewater)</h5>
+                                <div class="grid md:grid-cols-2 gap-8 items-center">
+                                    <p>Analyzed using Atomic Absorption Spectrophotometry (AAS) or ICP-MS after acid digestion to bring metals into solution.</p>
+                                    <div class="visual-art-container h-40">
+                                        <svg width="100%" height="100%" viewBox="0 0 200 100">
+                                            <title>Animated diagram of an Atomic Absorption Spectrophotometer.</title>
+                                            <rect x="10" y="40" width="20" height="20" fill="#fef08a"></rect>
+                                            <text x="13" y="70" font-size="6">Light</text>
+                                            <line x1="35" y1="50" x2="85" y2="50" stroke="#fef08a" stroke-width="2">
+                                                 <animate attributeName="stroke-opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
+                                            </line>
+                                            <path fill="#f97316">
+                                                <animate attributeName="d" values="M 90 60 L 100 40 L 110 60 Z; M 88 60 L 100 35 L 112 60 Z; M 90 60 L 100 40 L 110 60 Z" dur="0.5s" repeatCount="indefinite"/>
+                                            </path>
+                                            <text x="90" y="70" font-size="6">Flame</text>
+                                            <line x1="100" y1="90" x2="100" y2="60" stroke="#6b7280" stroke-width="1"></line>
+                                            <circle cx="100" cy="90" r="3" fill="#3b82f6">
+                                                <animateMotion path="M 0 0 V -30" dur="2s" repeatCount="indefinite"/>
+                                            </circle>
+                                            <text x="90" y="98" font-size="6">Sample</text>
+                                            <rect x="170" y="40" width="20" height="20" fill="#d1d5db"></rect>
+                                            <text x="168" y="70" font-size="6">Detector</text>
+                                            <line x1="115" y1="50" x2="165" y2="50" stroke="#fef08a" stroke-width="2" stroke-dasharray="4">
+                                                 <animate attributeName="stroke-opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+                                            </line>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                             <div>
+                                <h5 class="font-semibold text-gray-700">Pesticide Residue Analysis</h5>
+                                 <div class="grid md:grid-cols-2 gap-8 items-center">
+                                    <p>Involves extraction and analysis using Gas Chromatography (GC) or HPLC, separating compounds for identification.</p>
+                                     <div class="visual-art-container h-48">
+                                        <svg width="100%" height="100%" viewBox="0 0 200 100">
+                                            <title>Gas Chromatography</title>
+                                            <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">GC: Separating Pesticides</text>
+                                            <rect x="10" y="40" width="10" height="20" fill="#d1d5db" />
+                                            <text x="8" y="35" font-size="6">Injector</text>
+                                            <path d="M 25 50 C 45 30, 65 70, 85 50 S 125 30, 145 50" stroke="#a0aec0" stroke-width="4" fill="none"/>
+                                            <text x="75" y="35" font-size="6">Column</text>
+                                            <circle r="2" fill="#ef4444">
+                                                <animateMotion dur="4s" repeatCount="indefinite" path="M 25 50 C 45 30, 65 70, 85 50 S 125 30, 145 50" />
+                                            </circle>
+                                             <circle r="2" fill="#3b82f6">
+                                                <animateMotion dur="6s" repeatCount="indefinite" path="M 25 50 C 45 30, 65 70, 85 50 S 125 30, 145 50" />
+                                            </circle>
+                                            <path d="M 150 80 L 190 80" stroke="#374151" stroke-width="1"/>
+                                            <path id="peak1" d="M 160 80 C 162 60, 168 60, 170 80" stroke="#ef4444" stroke-width="1" fill="none" opacity="0">
+                                                <animate id="p1" attributeName="opacity" from="0" to="1" dur="1s" begin="4s" repeatCount="indefinite" />
+                                            </path>
+                                            <path id="peak2" d="M 175 80 C 177 50, 183 50, 185 80" stroke="#3b82f6" stroke-width="1" fill="none" opacity="0">
+                                                <animate id="p2" attributeName="opacity" from="0" to="1" dur="1s" begin="6s" repeatCount="indefinite" />
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="equipment" class="tab-content">
@@ -412,31 +588,41 @@
                             <div>
                                 <h5 class="font-bold text-lg text-gray-700">Water Samplers</h5>
                                 <div class="mt-4 grid md:grid-cols-2 gap-6 text-center">
-                                    <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <div class="bg-gray-50 p-4 rounded-lg border animated-card">
                                         <h6 class="font-semibold">Van Dorn Sampler</h6>
-                                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto my-2">
-                                             <title>A horizontal Van Dorn water sampler.</title>
-                                             <g stroke="#374151" stroke-width="1.5">
-                                                 <rect x="10" y="45" width="80" height="10" fill="#e5e7eb"/>
-                                                 <rect x="5" y="40" width="5" height="20" fill="#d1d5db"/>
-                                                 <rect x="90" y="40" width="5" height="20" fill="#d1d5db"/>
-                                                 <line x1="50" y1="45" x2="50" y2="20"/>
-                                                 <circle cx="50" cy="20" r="3" fill="#374151"/>
-                                             </g>
-                                        </svg>
+                                        <div class="w-full h-32 mx-auto my-2 flex justify-center items-center">
+                                            <svg viewBox="0 0 100 50" class="h-full">
+                                                <title>Animated Van Dorn water sampler.</title>
+                                                <g>
+                                                    <rect x="10" y="20" width="80" height="10" fill="#e5e7eb" stroke="#374151" stroke-width="1"/>
+                                                    <rect id="vd-left-cap" x="5" y="15" width="5" height="20" fill="#d1d5db" stroke="#374151" stroke-width="1">
+                                                        <animate attributeName="x" values="5;-5;5" dur="3s" repeatCount="indefinite" />
+                                                    </rect>
+                                                    <rect id="vd-right-cap" x="90" y="15" width="5" height="20" fill="#d1d5db" stroke="#374151" stroke-width="1">
+                                                         <animate attributeName="x" values="90;100;90" dur="3s" repeatCount="indefinite" />
+                                                    </rect>
+                                                    <line x1="50" y1="20" x2="50" y2="5"/>
+                                                    <circle cx="50" cy="5" r="3" fill="#374151"/>
+                                                </g>
+                                            </svg>
+                                        </div>
                                         <p class="text-sm text-gray-600">A horizontal tube that collects water samples from specific depths.</p>
                                     </div>
-                                    <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <div class="bg-gray-50 p-4 rounded-lg border animated-card">
                                         <h6 class="font-semibold">Bailer</h6>
-                                        <svg viewBox="0 0 100 100" class="w-32 h-32 mx-auto my-2">
-                                             <title>A simple bailer for water sampling.</title>
-                                             <g stroke="#374151" stroke-width="1.5">
-                                                 <rect x="45" y="25" width="10" height="60" fill="#e5e7eb"/>
-                                                 <circle cx="50" cy="85" r="3" fill="#6b7280"/>
-                                                 <line x1="50" y1="25" x2="50" y2="10"/>
-                                                 <line x1="45" y1="10" x2="55" y2="10"/>
-                                             </g>
-                                        </svg>
+                                        <div class="w-full h-32 mx-auto my-2 flex justify-center items-center">
+                                            <svg viewBox="0 0 50 100" class="h-full">
+                                                <title>Animated simple bailer for water sampling.</title>
+                                                <g stroke="#374151" stroke-width="1.5">
+                                                    <rect x="20" y="10" width="10" height="80" fill="#e5e7eb"/>
+                                                    <circle id="bailer-ball" cx="25" cy="85" r="3" fill="#6b7280">
+                                                        <animate attributeName="cy" values="85;75;85" dur="2s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    <line x1="25" y1="10" x2="25" y2="0"/>
+                                                    <line x1="20" y1="0" x2="30" y2="0"/>
+                                                </g>
+                                            </svg>
+                                        </div>
                                         <p class="text-sm text-gray-600">A simple tube with a check valve, used to retrieve samples from wells.</p>
                                     </div>
                                 </div>
@@ -495,7 +681,41 @@
             <div class="bg-white p-8 rounded-xl shadow-md mb-8">
                 <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 2: Enumerating Total Coliforms by Membrane Filtration</h3>
                 <p class="mb-6"><strong>Objective:</strong> To quantify the number of coliform bacteria in a water sample, which are indicators of fecal contamination.</p>
-                <img src="https://placehold.co/600x300/e0f2fe/374151?text=Membrane+Filtration+Apparatus" alt="Diagram of a membrane filtration apparatus" class="w-full max-w-md mx-auto rounded-lg my-4 shadow-md">
+                <div class="visual-art-container w-full max-w-md h-48 mx-auto my-4">
+                     <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+                        <title>Animated diagram of a membrane filtration apparatus.</title>
+                        <!-- Funnel -->
+                        <path d="M 70 10 L 130 10 L 110 50 L 90 50 Z" fill="#d1e8ff" stroke="#6b7280" stroke-width="1"></path>
+                        <!-- Water drops -->
+                        <circle cx="100" cy="20" r="2" fill="#3b82f6">
+                            <animate attributeName="cy" from="20" to="60" dur="2s" begin="0s" repeatCount="indefinite" />
+                        </circle>
+                         <circle cx="95" cy="20" r="2" fill="#3b82f6">
+                            <animate attributeName="cy" from="20" to="60" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                        </circle>
+                         <circle cx="105" cy="20" r="2" fill="#3b82f6">
+                            <animate attributeName="cy" from="20" to="60" dur="2s" begin="1s" repeatCount="indefinite" />
+                        </circle>
+                        <!-- Bacteria getting stuck -->
+                        <circle cx="98" cy="50" r="1.5" fill="#ef4444">
+                             <animate attributeName="cy" from="25" to="50" dur="1.8s" begin="0.2s" repeatCount="indefinite" fill="freeze"/>
+                        </circle>
+                        <circle cx="102" cy="50" r="1.5" fill="#ef4444">
+                            <animate attributeName="cy" from="25" to="50" dur="1.8s" begin="1.2s" repeatCount="indefinite" fill="freeze"/>
+                        </circle>
+                        <!-- Membrane -->
+                        <line x1="85" y1="55" x2="115" y2="55" stroke="#374151" stroke-width="2"></line>
+                        <!-- Filtered water drops -->
+                         <circle cx="100" cy="70" r="2" fill="#3b82f6" opacity="0">
+                            <animate attributeName="cy" from="60" to="90" dur="1.5s" begin="0s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="1" to="0" dur="1.5s" begin="0s" repeatCount="indefinite" />
+                        </circle>
+                         <circle cx="95" cy="70" r="2" fill="#3b82f6" opacity="0">
+                            <animate attributeName="cy" from="60" to="90" dur="1.5s" begin="0.5s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="1" to="0" dur="1.5s" begin="0.5s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
                 <h4 class="font-semibold text-lg mb-3">Procedure:</h4>
                 <div class="step">
                     <div class="step-number">1</div>
@@ -516,10 +736,39 @@
             </div>
 
              <!-- Experiment 3: Heavy Metals -->
-            <div class="bg-white p-8 rounded-xl shadow-md">
+            <div class="bg-white p-8 rounded-xl shadow-md mb-8">
                 <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 3: Heavy Metal (e.g., Lead) Analysis in Soil</h3>
                 <p class="mb-6"><strong>Objective:</strong> To determine the concentration of a specific heavy metal, such as lead (Pb), in a contaminated soil sample using Atomic Absorption Spectrophotometry (AAS).</p>
-                <img src="https://placehold.co/600x300/d1fae5/374151?text=Atomic+Absorption+Spectrophotometer" alt="Diagram of an Atomic Absorption Spectrophotometer" class="w-full max-w-md mx-auto rounded-lg my-4 shadow-md">
+                 <div class="visual-art-container w-full max-w-md h-48 mx-auto my-4">
+                    <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+                        <title>Animated diagram of an Atomic Absorption Spectrophotometer.</title>
+                        <!-- Light Source -->
+                        <rect x="10" y="40" width="20" height="20" fill="#fef08a"></rect>
+                        <text x="13" y="70" font-size="6">Light</text>
+                        <!-- Light Beam -->
+                        <line x1="35" y1="50" x2="85" y2="50" stroke="#fef08a" stroke-width="2">
+                             <animate attributeName="stroke-opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
+                        </line>
+                        <!-- Flame/Atomizer -->
+                        <path fill="#f97316">
+                            <animate attributeName="d" values="M 90 60 L 100 40 L 110 60 Z; M 88 60 L 100 35 L 112 60 Z; M 90 60 L 100 40 L 110 60 Z" dur="0.5s" repeatCount="indefinite"/>
+                        </path>
+                        <text x="90" y="70" font-size="6">Flame</text>
+                        <!-- Sample Nebulizer -->
+                        <line x1="100" y1="90" x2="100" y2="60" stroke="#6b7280" stroke-width="1"></line>
+                        <circle cx="100" cy="90" r="3" fill="#3b82f6">
+                            <animateMotion path="M 0 0 V -30" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <text x="90" y="98" font-size="6">Sample</text>
+                        <!-- Detector -->
+                        <rect x="170" y="40" width="20" height="20" fill="#d1d5db"></rect>
+                        <text x="168" y="70" font-size="6">Detector</text>
+                        <!-- Final Beam -->
+                        <line x1="115" y1="50" x2="165" y2="50" stroke="#fef08a" stroke-width="2" stroke-dasharray="4">
+                             <animate attributeName="stroke-opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+                        </line>
+                    </svg>
+                </div>
                 <h4 class="font-semibold text-lg mb-3">Procedure Summary:</h4>
                  <div class="step">
                     <div class="step-number">1</div>
@@ -535,6 +784,110 @@
                  <div class="step">
                     <div class="step-number">3</div>
                     <div><strong>Quantification:</strong> The concentration is determined by comparing the absorbance of the sample to a calibration curve created using standard solutions of known lead concentrations. The final result is reported in mg of lead per kg of dry soil (mg/kg).</div>
+                </div>
+            </div>
+
+            <!-- Experiment 4: General Water Quality Parameters -->
+            <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 4: General Water Quality Parameters</h3>
+                <p class="mb-6"><strong>Objective:</strong> To measure key physical and chemical parameters like pH, conductivity, salinity, turbidity, and alkalinity that provide a baseline for water quality.</p>
+                 <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h5 class="font-semibold">pH, Conductivity, Salinity, and Turbidity</h5>
+                        <p class="mt-1">These parameters are typically measured using calibrated electronic meters (probes) or a nephelometer for turbidity. The process involves: <strong>(a)</strong> Calibrating each instrument with standard solutions. <strong>(b)</strong> Rinsing the probe/cuvette with deionized water and then with the sample. <strong>(c)</strong> Immersing the probe or placing the cuvette in the sample and recording the stable reading.</p>
+                    </div>
+                </div>
+                 <div class="visual-art-container grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div>
+                        <h6 class="font-semibold text-sm">pH Meter</h6>
+                        <svg viewBox="0 0 100 100" class="w-full h-32">
+                           <title>pH Meter Animation</title>
+                            <rect x="30" y="10" width="40" height="20" fill="#d1d5db"/>
+                            <text id="ph-text" x="50" y="25" text-anchor="middle" font-size="10">7.0</text>
+                            <rect x="48" y="30" width="4" height="20" fill="#a0aec0"/>
+                            <rect x="45" y="50" width="10" height="20" fill="#f8fafc" stroke="#a0aec0"/>
+                            <path d="M 20 100 L 80 100 L 80 70 C 80 60, 20 60, 20 70 Z" fill="#a0e9ff"/>
+                            <animate xlink:href="#ph-text" attributeName="opacity" from="1" to="0" dur="0.5s" begin="ph-anim.begin+2.5s" fill="freeze"/>
+                            <text id="ph-text-new" x="50" y="25" text-anchor="middle" font-size="10" opacity="0">4.8<animate id="ph-anim" attributeName="opacity" from="0" to="1" dur="0.5s" begin="3s;ph-anim.begin+6s" fill="freeze"/></text>
+                        </svg>
+                    </div>
+                    <div>
+                        <h6 class="font-semibold text-sm">Conductivity Meter</h6>
+                         <svg viewBox="0 0 100 100" class="w-full h-32">
+                           <title>Conductivity Meter Animation</title>
+                           <rect x="30" y="10" width="40" height="20" fill="#d1d5db"/>
+                           <text id="cond-text" x="50" y="25" text-anchor="middle" font-size="8">... µS/cm</text>
+                           <rect x="48" y="30" width="4" height="20" fill="#a0aec0"/>
+                           <rect x="40" y="50" width="20" height="15" fill="#f8fafc" stroke="#a0aec0"/>
+                           <path d="M 20 100 L 80 100 L 80 70 C 80 60, 20 60, 20 70 Z" fill="#a0e9ff"/>
+                           <circle cx="50" cy="80" r="1.5" fill="#f59e0b"><animateTransform attributeName="transform" type="translate" values="0 0; -20 0; 20 -5; 0 0" dur="2s" repeatCount="indefinite" /></circle>
+                           <animate xlink:href="#cond-text" attributeName="opacity" from="1" to="0" dur="0.5s" begin="cond-anim.begin+2.5s" fill="freeze"/>
+                           <text id="cond-text-new" x="50" y="25" text-anchor="middle" font-size="8" opacity="0">1250 µS/cm<animate id="cond-anim" attributeName="opacity" from="0" to="1" dur="0.5s" begin="3s;cond-anim.begin+6s" fill="freeze"/></text>
+                        </svg>
+                    </div>
+                     <div>
+                        <h6 class="font-semibold text-sm">Turbidity Meter</h6>
+                         <svg viewBox="0 0 100 100" class="w-full h-32">
+                           <title>Turbidity Meter Animation</title>
+                            <rect x="10" y="45" width="20" height="10" fill="#fef08a"/>
+                            <line x1="30" y1="50" x2="60" y2="50" stroke="#fef08a" stroke-width="2"/>
+                            <rect x="60" y="40" width="20" height="20" fill="#a0e9ff" stroke="#a0aec0"/>
+                            <circle cx="65" cy="45" r="1" fill="white"><animateTransform attributeName="transform" type="translate" values="0 0; 5 8; -3 -4; 0 0" dur="3s" repeatCount="indefinite"/></circle>
+                             <circle cx="72" cy="55" r="1" fill="white"><animateTransform attributeName="transform" type="translate" values="0 0; -4 -6; 2 5; 0 0" dur="2.5s" repeatCount="indefinite"/></circle>
+                             <line x1="70" y1="40" x2="70" y2="20" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="2"/>
+                            <rect x="65" y="10" width="10" height="10" fill="#d1d5db"/>
+                             <text x="5" y="90" font-size="8">Light Source</text>
+                             <text x="60" y="90" font-size="8">Detector (90°)</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="step mt-4">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h5 class="font-semibold">Alkalinity by Titration</h5>
+                        <p class="mt-1">Alkalinity is measured by titrating the sample with a standard sulfuric acid solution to a pH endpoint of ~4.5, monitored using a pH meter or color indicator. The volume of acid used determines the alkalinity.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experiment 5: Anion Analysis -->
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Experiment 5: Anion Analysis (Chloride, Sulphate, Nitrate, Phosphate)</h3>
+                <p class="mb-6"><strong>Objective:</strong> To determine the concentration of key anions, which can indicate specific types of pollution from sources like sewage, industrial discharge, or agricultural runoff.</p>
+                <div class="visual-art-container w-full max-w-md h-48 mx-auto my-4">
+                    <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+                        <title>UV-Vis Spectrophotometer</title>
+                        <text x="5" y="12" font-size="9" font-weight="bold" fill="#374151">Spectrophotometry</text>
+                        <rect x="10" y="40" width="20" height="20" fill="#fef08a"></rect>
+                        <text x="13" y="70" font-size="6">Light</text>
+                        <line x1="35" y1="50" x2="85" y2="50" stroke="#fef08a" stroke-width="2" />
+
+                        <rect x="85" y="40" width="20" height="20" stroke="#a0aec0" fill-opacity="0.8">
+                           <animate attributeName="fill" values="#e0f2fe;#60a5fa;#e0f2fe" dur="4s" repeatCount="indefinite" />
+                        </rect>
+                         <text x="86" y="70" font-size="6">Sample</text>
+
+                        <rect x="170" y="40" width="20" height="20" fill="#d1d5db"></rect>
+                        <text x="168" y="70" font-size="6">Detector</text>
+                        <line x1="110" y1="50" x2="165" y2="50" stroke="#fef08a" stroke-width="2">
+                             <animate attributeName="stroke-opacity" values="1;0.4;1" dur="4s" repeatCount="indefinite" />
+                        </line>
+                    </svg>
+                </div>
+                 <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h5 class="font-semibold">Chloride (Titrimetric Method)</h5>
+                        <p class="mt-1">The Argentometric method is used. A water sample is titrated with silver nitrate solution, using potassium chromate as an indicator. Silver chloride precipitates first. The endpoint is reached when all chloride has precipitated and a reddish-brown silver chromate precipitate begins to form.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h5 class="font-semibold">Sulphate, Nitrate, and Phosphate (Spectrophotometric Methods)</h5>
+                        <p class="mt-1">These ions are measured by reacting them with specific reagents to form colored solutions, then measuring the color intensity with a spectrophotometer. <strong>Sulphate</strong> is precipitated with barium chloride and the turbidity is measured. <strong>Nitrate</strong> is often measured by its absorbance in the UV spectrum. <strong>Phosphate</strong> is reacted with ammonium molybdate and ascorbic acid to produce a blue complex, which is then measured.</p>
+                    </div>
                 </div>
             </div>
 
@@ -555,7 +908,7 @@
             </button>
             <p id="character-text" class="text-sm text-gray-700"></p>
         </div>
-        <img src="https://placehold.co/100x150/ff9800/ffffff?text=Lalettan" alt="Lalettan, the lab guide" id="character-avatar" class="rounded-t-full">
+        <img src="https://placehold.co/100x150/e0f2fe/1e3a8a?text=Dr.+Kalam" alt="Dr. Kalam, the guide" id="character-avatar" class="rounded-t-full">
     </div>
 
 
@@ -584,11 +937,11 @@
 
 
         const characterDialogues = {
-            home: "Namaskaram! I'm Lalettan, your guide. We'll learn this together. Remember, every big discovery is a series of simple, correct steps. Let's start, shall we?",
-            waterSampling: "Kandille? Water sampling... It's all about timing and being in the right place. Oru correct sample can tell you the whole story. Athu pole. Just like that.",
-            soilSampling: "Ah, mannu... the soil. Each layer has a history. We must collect it with respect. Focus cheyyu... focus. You'll get what you need.",
-            analysis: "Welcome to the lab. Ivide, everything must be perfect. No room for error. A small mistake can change everything. So, with full concentration, let's proceed.",
-            experiments: "Now for the main event. Theory is one thing, but practice... that is the real test. Cheythu nokku... try it. You will get it. Appo, sheri!"
+            home: "Welcome! Dream is not what you see in sleep, it is the thing which doesn't let you sleep. Let your journey of knowledge begin here.",
+            waterSampling: "To succeed in your mission, you must have single-minded devotion to your goal. Every drop of water we collect is a step towards protecting our planet.",
+            soilSampling: "Look at the sky. We are not alone. The whole universe is friendly to us. The earth holds answers. Let us approach it with curiosity and care.",
+            analysis: "Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great. In this lab, we turn data into understanding.",
+            experiments: "Failure will never overtake you if your determination to succeed is strong enough. Every experiment is a lesson. Do not be afraid to make mistakes."
         };
 
         function speak(text, onEndCallback) {
@@ -687,4 +1040,77 @@
         const tabContents = document.querySelectorAll('.tab-content');
 
         tabButtons.forEach(button => {
-            button.addEventListener('click', ().
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                stopSpeaking();
+                resetAllReadAloudButtons();
+
+                const targetTab = button.getAttribute('data-tab');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // --- Read Aloud Logic ---
+        const readAloudButtons = document.querySelectorAll('.read-aloud-btn');
+
+        function setButtonToPlay(button) {
+            const iconContainer = button.querySelector('div');
+            iconContainer.classList.remove('icon-stop');
+            iconContainer.classList.add('icon-play');
+        }
+
+        function setButtonToStop(button) {
+            const iconContainer = button.querySelector('div');
+            iconContainer.classList.remove('icon-play');
+            iconContainer.classList.add('icon-stop');
+        }
+
+        function resetAllReadAloudButtons() {
+            readAloudButtons.forEach(setButtonToPlay);
+        }
+
+        readAloudButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const sectionId = button.dataset.sectionId;
+                const section = document.getElementById(sectionId);
+                const iconContainer = button.querySelector('div');
+                const isCurrentlyPlaying = iconContainer.classList.contains('icon-stop');
+                
+                stopSpeaking();
+                resetAllReadAloudButtons();
+
+                if (isCurrentlyPlaying) {
+                    return;
+                }
+                
+                let textToRead = '';
+                const contentSelectors = 'p, li, h3, h4, h5, td';
+                section.querySelectorAll(contentSelectors).forEach(el => {
+                    textToRead += el.textContent.trim() + '. ';
+                });
+
+                if (textToRead) {
+                    setButtonToStop(button);
+                    speak(textToRead, () => {
+                        setButtonToPlay(button);
+                    });
+                }
+            });
+        });
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+            updateMuteButtonIcon();
+        });
+    </script>
+</body>
+</html>
+
